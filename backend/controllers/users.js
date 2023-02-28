@@ -1,4 +1,5 @@
 const UserModel = require('../models/user');
+const bcrypt = require('bcryptjs');
 
 const INVALID_ERROR = 400;
 const DONT_EXIST_ERROR = 404;
@@ -22,8 +23,10 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  UserModel.create({ name, about, avatar })
+  const { email, password, name, about, avatar } = req.body;
+
+  bcrypt.hash(password, 10)
+    .then((hash) => UserModel.create({email, password:hash, name, about, avatar }))
     .then((newUser) => res.send({ data: newUser }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
