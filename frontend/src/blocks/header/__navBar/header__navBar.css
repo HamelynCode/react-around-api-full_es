@@ -1,0 +1,9 @@
+.header__navBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 24px;
+
+    width: 100%;
+}

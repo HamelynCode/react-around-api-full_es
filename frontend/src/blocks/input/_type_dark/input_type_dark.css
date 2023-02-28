@@ -1,0 +1,20 @@
+.input_type_dark {
+    width: 100%;
+    height: 40px;
+  
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+
+    border: none;
+    border-bottom: 2px solid white;
+
+    background-color: black;
+    color: white;
+}
+
+.input_type_dark:focus {
+    color: rgb(202, 202, 202);
+    outline: none;
+}
