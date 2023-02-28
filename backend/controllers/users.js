@@ -1,5 +1,6 @@
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const INVALID_ERROR = 400;
 const DONT_EXIST_ERROR = 404;
@@ -33,6 +34,19 @@ const createUser = (req, res) => {
         return res.status(INVALID_ERROR).send({ message: 'Los datos no son válidos' });
       }
       return res.status(SERVER_ERROR).send({ message: 'An error has ocurred on the server' });
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  UserModel.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id:user._id }, 'clave-secreta', { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
     });
 };
 
@@ -77,5 +91,5 @@ const updateAvatar = (req, res) => {
 };
 
 module.exports = {
-  getUsers, getUserById, createUser, updateProfile, updateAvatar,
+  getUsers, getUserById, createUser, login, updateProfile, updateAvatar,
 };

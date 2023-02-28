@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const routeUsers = require('./routes/users');
 const routeCards = require('./routes/cards');
 
+const { login, createUser } = require('./controllers/users');
+
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -20,6 +22,8 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.post('/signup', createUser);
+app.post('/signin', login);
 app.use('/', routeUsers);
 app.use('/', routeCards);
 app.use(pageNotFound);
