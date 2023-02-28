@@ -5,6 +5,7 @@ const routeUsers = require('./routes/users');
 const routeCards = require('./routes/cards');
 
 const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -15,15 +16,11 @@ const pageNotFound = (req, res, next) => {
   next();
 };
 
-app.use((req, res, next) => {
-  req.user = { _id: '639ba523ce51ba3c5ba5490a' };
-  next();
-});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signup', createUser);
 app.post('/signin', login);
+app.use(auth);
 app.use('/', routeUsers);
 app.use('/', routeCards);
 app.use(pageNotFound);

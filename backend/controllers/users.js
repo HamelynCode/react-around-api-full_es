@@ -50,6 +50,17 @@ const login = (req, res) => {
     });
 };
 
+const getCurrentUser = (req, res) => {
+  UserModel.findOne({ _id: req.user._id })
+    .orFail(() => {
+      const error = new Error('User ID not found');
+      error.statusCode = DONT_EXIST_ERROR;
+      throw error;
+    })
+    .then((user) => res.send(user))
+    .catch((err) => res.status(DONT_EXIST_ERROR).send({ message: err }));
+};
+
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   UserModel.findByIdAndUpdate(
@@ -91,5 +102,5 @@ const updateAvatar = (req, res) => {
 };
 
 module.exports = {
-  getUsers, getUserById, createUser, login, updateProfile, updateAvatar,
+  getUsers, getUserById, createUser, login, getCurrentUser, updateProfile, updateAvatar,
 };
