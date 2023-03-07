@@ -15,7 +15,7 @@ const createCard = (req, res) => {
   const owner = req.user._id;
 
   CardModel.create({ name, link, owner })
-    .then((newCard) => res.send({ data: newCard }))
+    .then((newCard) => res.send(newCard))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(INVALID_ERROR).send({ message: 'Los datos no son válidos' });

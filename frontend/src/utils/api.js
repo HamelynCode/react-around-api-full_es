@@ -1,18 +1,27 @@
 class Api {
-  constructor({ user, url, headers }) {
+  constructor({ user, url }) {
     this._user = user;
     this._url = url;
-    this._headers = headers;
+    this._token = "";
   }
 
   _makeRequest(method, url, body) {
     return fetch(`${this._url}${url}`, {
       method: method,
-      headers: this._headers,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Content-Security-Policy': 'default-src self; img-src *; script-src self',
+        'Authorization': `Bearer ${this._token}`,
+      },
       body: method !== "GET" ? JSON.stringify(body) : undefined,
     }).then((res) => {
       return res.ok ? res.json() : Promise.reject(`Error: ${res.statusText}`);
     });
+  }
+
+  setAuthorizationToken(token) {
+    this._token = token;
   }
 
   getUserInfo() {
@@ -42,11 +51,11 @@ class Api {
   }
 
   addNewLike(cardId) {
-    return this._makeRequest("PUT", `/cards/likes/${cardId}`);
+    return this._makeRequest("PUT", `/cards/${cardId}/likes`);
   }
 
   removeLike(cardId) {
-    return this._makeRequest("DELETE", `/cards/likes/${cardId}`);
+    return this._makeRequest("DELETE", `/cards/${cardId}/likes`);
   }
 
   setProfileImage(url) {
@@ -58,11 +67,7 @@ class Api {
 
 const api = new Api({
   user: 'me',
-  url: 'https://around.nomoreparties.co/v1/web_es_cohort_02',
-  headers: {
-    authorization: '43821f01-4b26-43b6-994f-72bfc960dac4',
-    'Content-Type': 'application/json',
-  }
+  url: 'http://localhost:3000'
 });
 
 export default api;

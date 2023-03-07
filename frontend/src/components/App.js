@@ -21,31 +21,34 @@ function App() {
   const [isFailedPopupOpen, setIsFailedPopupOpen] = useState(false);
 
   const [cards, setCards] = useState([]);
+  const [token, setToken] = useState('');
 
   const history = useHistory();
 
   useEffect(()=>{
     if (localStorage.getItem('jwt')){
       const jwt = localStorage.getItem('jwt');
+      setToken(jwt);
       auth.checkToken(jwt).then((res) => {
         if (res) {
-          showMainPage(res.data.email);
+          showMainPage(res.email, jwt);
         }
       })
     }
-  }, [showMainPage]);
+  }, []);
 
-  function showMainPage(userEmail) {
+  function showMainPage(userEmail, token) {
     setLoggedIn(true);
     setEmail(userEmail);
     history.push('/');
 
+    api.setAuthorizationToken(token);
     api.getUserInfo()
     .then((info)=>{
       setCurrentUser(info);
       api.getInitialCards()
       .then((cards)=>{
-        setCards(cards);
+        setCards(cards.reverse());
       })
       .catch((err) => {
         console.log(err);
@@ -57,8 +60,8 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    
+    const isLiked = card.likes.some(i => i === currentUser._id);
+
     if(isLiked){
       api.removeLike(card._id).then((newCard)=>{
         setCards(cards.map(c => c._id === card._id ? newCard : c));
@@ -126,7 +129,8 @@ function App() {
   function handleLogin(password, email) {
     auth.authorize(password, email).then((data)=>{
       if(data){
-        showMainPage(email);
+        localStorage.setItem('jwt', data.token);
+        showMainPage(email, data.token);
       }
     });
   }

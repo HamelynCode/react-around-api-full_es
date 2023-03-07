@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const routeUsers = require('./routes/users');
 const routeCards = require('./routes/cards');
+const cors = require('cors');
 
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -15,6 +16,8 @@ const pageNotFound = (req, res, next) => {
   res.status(404).send({ message: 'Requested resource not found' });
   next();
 };
+
+app.use(cors({ origin : '*' }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
