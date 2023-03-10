@@ -2,6 +2,9 @@ const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'clave-secreta';
+
 const INVALID_ERROR = 400;
 const DONT_EXIST_ERROR = 404;
 const SERVER_ERROR = 500;
@@ -42,7 +45,7 @@ const login = (req, res) => {
 
   UserModel.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id:user._id }, 'clave-secreta', { expiresIn: '7d' });
+      const token = jwt.sign({ _id:user._id }, secretKey, { expiresIn: '7d' });
       res.send({ token });
     })
     .catch((err) => {
