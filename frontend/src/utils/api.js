@@ -67,7 +67,7 @@ class Api {
 
 const api = new Api({
   user: 'me',
-  url: 'http://localhost:3000'
+  url: 'http://20.0.187.166'
 });
 
 export default api;
