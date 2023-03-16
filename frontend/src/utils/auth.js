@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://20.0.187.166';
+export const BASE_URL = 'https://20.0.187.166/api';
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {

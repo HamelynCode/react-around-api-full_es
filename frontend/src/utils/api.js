@@ -67,7 +67,7 @@ class Api {
 
 const api = new Api({
   user: 'me',
-  url: 'http://20.0.187.166'
+  url: 'https://20.0.187.166/api'
 });
 
 export default api;
