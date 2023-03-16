@@ -17,9 +17,9 @@ const SIGNUP_SCHEMA = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().required().min(4),
-    name: Joi.string().required().min(2).max(30),
+    name: Joi.string().min(2).max(30),
     about: Joi.string().max(256),
-    avatar: Joi.string().pattern(new RegExp('https?:\/\/(www\.)?.{1,}')).required()
+    avatar: Joi.string().pattern(new RegExp('https?:\/\/(www\.)?.{1,}'))
   })
 };
 const SIGNIN_SCHEMA = {
@@ -38,11 +38,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-app.post('/signup', celebrate(SIGNUP_SCHEMA), createUser);
-app.post('/signin', celebrate(SIGNIN_SCHEMA), login);
+app.post('/api/signup', celebrate(SIGNUP_SCHEMA), createUser);
+app.post('/api/signin', celebrate(SIGNIN_SCHEMA), login);
 app.use(auth);
-app.use('/', routeUsers);
-app.use('/', routeCards);
+app.use('/api/', routeUsers);
+app.use('/api/', routeCards);
 app.use(pageNotFound);
 
 app.use(errorLogger);

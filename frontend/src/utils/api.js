@@ -67,7 +67,7 @@ class Api {
 
 const api = new Api({
   user: 'me',
-  url: 'https://20.0.187.166/api'
+  url: 'https://estudiolanda.cl/api'
 });
 
 export default api;
